@@ -1,0 +1,8 @@
+import { useParams } from "react-router-dom";
+
+const Index = () => {
+    const {id} = useParams();
+    return <div>Hello, World!{id}</div>;
+};
+
+export default Index;
