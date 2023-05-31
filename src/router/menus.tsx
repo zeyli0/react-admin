@@ -64,8 +64,13 @@ export type menusType = {
   exact?: boolean;
 }
 const menus:menusType[] = [
-    { 
+    {
         path: '/',
+        element: <Navigate to="/home/home" replace />
+    },
+    { 
+        path: '/home',
+        name: '导览',
         // 这个Layout是属于内容的整体，不能使用懒加载，否则回闪屏
         // element: LazyLoad("/layout"),
         // 如下显示
@@ -73,21 +78,25 @@ const menus:menusType[] = [
         icon: <HomeOutlined />,
         children: [
             {
-                path: '/home',
+                path: 'home',
+                name: '首页',
                 element: LazyLoad('../pages/home')
             },
             {
-                path: '/record',
+                path: 'record',
+                name: '记录',
                 element: LazyLoad('../pages/record')
             },
             {
-                path: '/detail',
+                path: 'detail',
+                name: '详细',
                 element: LazyLoad('../pages/detail')
             }
         ]
     },
     {
         path: '/login',
+        name: '登录',
         element: LazyLoad('../pages/login')
     },
     {

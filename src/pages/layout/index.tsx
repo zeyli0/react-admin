@@ -8,7 +8,7 @@ import {
     UserOutlined,
     VideoCameraOutlined,
 } from '@ant-design/icons';
-import { Layout, Menu, Button, theme } from 'antd';
+import { Layout, Menu, Button, theme, MenuProps } from 'antd';
 const { Header, Sider, Content } = Layout;
 
 
@@ -17,6 +17,10 @@ function Index() {
     const {
         token: { colorBgContainer },
     } = theme.useToken();
+
+    const handleClick:MenuProps['onClick'] = (e) => {
+        console.log('menu eee', e);
+    };
 
     return  (
         <Layout>
@@ -43,6 +47,7 @@ function Index() {
                             label: 'nav 3',
                         },
                     ]}
+                    onClick={handleClick}
                 />
             </Sider>
             <Layout>
