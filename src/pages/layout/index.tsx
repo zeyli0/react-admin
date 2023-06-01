@@ -3,13 +3,11 @@ import { Outlet } from "react-router-dom";
 
 import {
     MenuFoldOutlined,
-    MenuUnfoldOutlined,
-    UploadOutlined,
-    UserOutlined,
-    VideoCameraOutlined,
+    MenuUnfoldOutlined
 } from '@ant-design/icons';
-import { Layout, Menu, Button, theme, MenuProps } from 'antd';
+import { Layout, Button, theme } from 'antd';
 const { Header, Sider, Content } = Layout;
+import SideMenu from './sidemenu';
 
 
 function Index() {
@@ -18,15 +16,12 @@ function Index() {
         token: { colorBgContainer },
     } = theme.useToken();
 
-    const handleClick:MenuProps['onClick'] = (e) => {
-        console.log('menu eee', e);
-    };
-
     return  (
         <Layout>
             <Sider trigger={null} collapsible collapsed={collapsed}>
                 <div className="demo-logo-vertical" >hello !!</div>
-                <Menu
+                <SideMenu />
+                {/* <Menu
                     theme="dark"
                     mode="inline"
                     defaultSelectedKeys={['1']}
@@ -48,7 +43,7 @@ function Index() {
                         },
                     ]}
                     onClick={handleClick}
-                />
+                /> */}
             </Sider>
             <Layout>
                 <Header style={{ padding: 0, background: colorBgContainer }}>

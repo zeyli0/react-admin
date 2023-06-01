@@ -1,9 +1,6 @@
 import {ReactElement, ReactNode, Suspense, lazy } from "react";
 import { Navigate } from "react-router-dom";
 
-import {
-    HomeOutlined
-} from '@ant-design/icons';
 import { Spin } from "antd";
 
 // 路由懒加载的封装
@@ -55,64 +52,74 @@ const Layout = lazy(() => import('../pages/layout'));
 export type menusType = {
   path: string;
   name?: string;
-  element: ReactNode;
+  element?: ReactNode;
   children?: menusType[];
   title?: string;
-  icon?: ReactElement;
+  icon?: string;
   redirect?: string;
   meta?: object;
   exact?: boolean;
 }
-const menus:menusType[] = [
+const menus:Array<menusType> = [
     {
         path: '/',
         element: <Navigate to="/home/home" replace />
     },
     { 
         path: '/home',
-        name: '导览',
+        name: 'home',
         // 这个Layout是属于内容的整体，不能使用懒加载，否则回闪屏
         // element: LazyLoad("/layout"),
         // 如下显示
         element: <Layout />,
-        icon: <HomeOutlined />,
+        icon: 'HomeOutlined',
+        title: '导览',
         children: [
             {
                 path: 'home',
-                name: '首页',
+                name: 'home2',
+                title: '首页',
                 element: LazyLoad('../pages/home')
             },
             {
                 path: 'record',
-                name: '记录',
+                name: 'record',
+                title: '记录',
                 element: LazyLoad('../pages/record')
-            },
-            {
-                path: 'detail',
-                name: '详细',
-                element: LazyLoad('../pages/detail')
             }
         ]
     },
     {
+        path: '/codemirror',
+        name: 'codemirror',
+        element: <Layout />,
+        icon: 'HomeOutlined',
+        title: 'code mirror', 
+        children: [
+            {
+                path: 'index',
+                name: 'index',
+                title: 'sql',
+                element: LazyLoad('../pages/codemirror')
+            }
+        ]
+    },
+    {
+        path: '/detail',
+        name: 'detail',
+        element: LazyLoad('../pages/detail'),
+        icon: 'HomeOutlined',
+        title: '详细'
+    },
+    {
         path: '/login',
-        name: '登录',
+        name: 'login',
         element: LazyLoad('../pages/login')
     },
     {
-        path: '/*',
+        path: '*',
         element: <Navigate to="/login" replace />
     }
-    // {
-    //   path: '/*',
-    //   element: LazyLoad('../pages/nofound')
-    // }
-    // {
-    //   path: '/detail',
-    //   title: '系统首页',
-    //   icon: <HomeOutlined />,
-    //   element: lazy(() => import('../pages/detail'))
-    // },
     // {
     //   path: '/record',
     //   element: <Record />,

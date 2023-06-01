@@ -3,8 +3,8 @@ import { useRoutes } from 'react-router-dom';
 
 import menus from './menus';
 
-const Routes = () => {
+const RouterIndex = () => {
     return useRoutes(menus);
 };
 
-export default Routes;
+export default RouterIndex;
