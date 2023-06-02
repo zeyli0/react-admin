@@ -1,4 +1,4 @@
-import {ReactElement, ReactNode, Suspense, lazy } from "react";
+import { ReactNode, Suspense, lazy } from "react";
 import { Navigate } from "react-router-dom";
 
 import { Spin } from "antd";
@@ -59,6 +59,7 @@ export type menusType = {
   redirect?: string;
   meta?: object;
   exact?: boolean;
+  parentPath?: string;
 }
 const menus:Array<menusType> = [
     {
@@ -97,8 +98,8 @@ const menus:Array<menusType> = [
         title: 'code mirror', 
         children: [
             {
-                path: 'index',
-                name: 'index',
+                path: 'sql',
+                name: 'codemirrorIndex',
                 title: 'sql',
                 element: LazyLoad('../pages/codemirror')
             }

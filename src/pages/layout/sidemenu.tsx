@@ -6,10 +6,12 @@ import * as Icons from "@ant-design/icons";
 import menus, {menusType} from '../../router/menus';
 
 
-function SideMenu() {
-    const location = useLocation();
+function SideMenu(props: any) {
+    const {collapsed} = props;
+    const {pathname} = useLocation();
     const navigate = useNavigate();
-    const [selectedKey, setSelectedKey] = useState("1");
+    const [selectedKey, setSelectedKey] = useState(pathname);
+    const [openKeys, setOpenKeys] = useState<string[]>([]);
 
     type MenuItem = Required<MenuProps>['items'][number];
     function getItem(
@@ -39,8 +41,15 @@ function SideMenu() {
         menuList.forEach((item: menusType) => {
             if(item.title) {
                 if (!item?.children?.length) {
+                    if(item.parentPath) {
+                        const tmp = [item.parentPath, item.path].join('/');
+                        item.path = tmp;
+                    }
                     return newArr.push(getItem(item.title, item.path, addIcon(item.icon!)));
                 }
+                item.children.map(itm => {
+                    itm.parentPath = item.parentPath ? [item.parentPath, itm.path].join('/') : item.path.split('/').join('/');
+                });
                 newArr.push(
                     getItem(item.title, item.path, addIcon(item.icon!), deepLoopMenu(item.children))
                 );
@@ -48,24 +57,54 @@ function SideMenu() {
         });
         return newArr;
     };
+    // 获取菜单
     const getMenuData = () => {
         const data = menus;
         if(!data) {return ;}
-        setMenuList(deepLoopMenu(data));
+        const temp_menus = JSON.parse(JSON.stringify(data));
+        const getMenus = deepLoopMenu(temp_menus);
+        console.log(JSON.stringify(getMenus));
+        setMenuList(getMenus);
     };
     useEffect(() => {
         getMenuData();
     }, []);
 
+    const getOpenKeys = (path: string) => {
+        let newStr = "";
+        const newArr: any[] = [];
+        const arr = path.split("/").map(i => "/" + i);
+        for (let i = 1; i < arr.length - 1; i++) {
+            newStr += arr[i];
+            newArr.push(newStr);
+        }
+        return newArr;
+    };
+    // 设置key
     useEffect(() => {
-        const paths = location.pathname.split('/');
-        const newSelectedKey = paths[paths.length - 1];
-        setSelectedKey(newSelectedKey);
-    }, [location]);
+        console.log('collapsed--', collapsed);
+        setSelectedKey(pathname);
+        collapsed ? null : setOpenKeys(getOpenKeys(pathname));
+    }, [pathname]);
 
+
+    // 点击菜单
     const handleClick:MenuProps['onClick'] = (e) => {
-        console.log('handleClick', e);
-        navigate(e.key, { replace: true });
+        const path = e.keyPath.reverse().join('/');
+        console.log('handleClick', e, path);
+        navigate(e.key);
+    };
+    // 切换open
+    const onOpenChange = (openKeys: string[]) => {
+        console.log('change ', openKeys);
+        if (openKeys.length === 0 || openKeys.length === 1) {
+            return setOpenKeys(openKeys);
+        }
+        const latestOpenKey = openKeys[openKeys.length - 1];
+        if (latestOpenKey.includes(openKeys[0])) {
+            return setOpenKeys(openKeys);
+        }
+        setOpenKeys([latestOpenKey]);
     };
 
     return (
@@ -75,9 +114,10 @@ function SideMenu() {
                 mode="inline"
                 triggerSubMenuAction="click"
                 selectedKeys={[selectedKey]}
-                defaultSelectedKeys={['1']}
+                openKeys={openKeys}
                 items={menuList}
                 onClick={handleClick}
+                onOpenChange={onOpenChange}
             >
             </Menu>
         </>
