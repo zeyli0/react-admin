@@ -86,7 +86,29 @@ const menus:Array<menusType> = [
                 path: 'record',
                 name: 'record',
                 title: '记录',
-                element: LazyLoad('../pages/record')
+                element: LazyLoad('../pages/record'),
+                children: [
+                    {
+                        path: 'detail',
+                        name: 'detail',
+                        title: '详细',
+                        element: LazyLoad('../pages/detail'),
+                        children: [
+                            {
+                                path: 'detail1',
+                                name: 'detail1',
+                                title: '详细1',
+                                element: LazyLoad('../pages/detail'),
+                            }
+                        ]
+                    }, 
+                    {
+                        path: 'detail2',
+                        name: 'detail2',
+                        title: '详细2',
+                        element: LazyLoad('../pages/detail'),
+                    }
+                ]
             }
         ]
     },

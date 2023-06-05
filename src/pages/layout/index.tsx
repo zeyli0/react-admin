@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+// import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
-import { connect, useDispatch, useSelector } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import {
     MenuFoldOutlined,
     MenuUnfoldOutlined
@@ -12,43 +12,44 @@ import SideMenu from './sidemenu';
 import { updateCollapse } from "../../redux/modules/menuSlice";
 
 
-function Index() {
+function Index(props: any) {
+    console.log('props---', props);
     const dispatch = useDispatch();
     // todo
-    const collapsedVal = useSelector((state:any) => state.collapsed);
-    console.log('collapsedVal-', collapsedVal);
+    // const collapsedVal = useSelector((state:any) => state.collapsed);
+    // const [collapsed, setCollapsed] = useState(collapsedVal.collapsed);
+    const { collapsed } = props;
 
-    const [collapsed, setCollapsed] = useState(collapsedVal);
     const {
         token: { colorBgContainer },
     } = theme.useToken();
 
     // 监听窗口大小变化
-    const listeningWindow = () => {
-        window.onresize = () => {
-            return (() => {
-                const screenWidth = document.body.clientWidth;
-                if (!collapsed && screenWidth < 1200) {dispatch(updateCollapse(true));}
-                if (!collapsed && screenWidth > 1200) {dispatch(updateCollapse(false));}
-            })();
-        };
-    };
-    useEffect(() => {
-        listeningWindow();
-    }, []);
+    // const listeningWindow = () => {
+    //     window.onresize = () => {
+    //         return (() => {
+    //             const screenWidth = document.body.clientWidth;
+    //             if (!collapsed && screenWidth < 1200) {dispatch(updateCollapse(true));}
+    //             if (!collapsed && screenWidth > 1200) {dispatch(updateCollapse(false));}
+    //         })();
+    //     };
+    // };
+    // useEffect(() => {
+    //     listeningWindow();
+    // }, []);
 
     return  (
         <section style={{display: 'flex'}}>
             <Sider trigger={null} collapsible collapsed={collapsed} style={{backgroundColor: ' #001529'}}>
                 <div className="demo-logo-vertical" >hello !!</div>
-                <SideMenu  collapsed={collapsed}/>
+                <SideMenu collapsed={collapsed} />
             </Sider>
             <Layout>
                 <Header style={{ padding: 0, background: colorBgContainer }}>
                     <Button
                         type="text"
                         icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-                        onClick={() => setCollapsed(!collapsed)}
+                        onClick={() => dispatch(updateCollapse(!collapsed))}
                         style={{
                             fontSize: '16px',
                             width: 64,

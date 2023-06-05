@@ -8,6 +8,7 @@ import menus, {menusType} from '../../router/menus';
 
 function SideMenu(props: any) {
     const {collapsed} = props;
+
     const {pathname} = useLocation();
     const navigate = useNavigate();
     const [selectedKey, setSelectedKey] = useState(pathname);
@@ -37,33 +38,40 @@ function SideMenu(props: any) {
         if(!name) { return null; }
         return createElement(customIcons[name]);
     };
+    // 生成antd menu
     const deepLoopMenu = (menuList: menusType[], newArr: MenuItem[] = []) => {
         menuList.forEach((item: menusType) => {
             if(item.title) {
                 if (!item?.children?.length) {
                     if(item.parentPath) {
-                        const tmp = [item.parentPath, item.path].join('/');
-                        item.path = tmp;
+                        item.path = [item.parentPath, item.path].join('/');
                     }
                     return newArr.push(getItem(item.title, item.path, addIcon(item.icon!)));
                 }
                 item.children.map(itm => {
-                    itm.parentPath = item.parentPath ? [item.parentPath, itm.path].join('/') : item.path.split('/').join('/');
+                    itm.parentPath = item.parentPath 
+                        ? [item.parentPath, item.path].join('/')
+                        : item.path.split('/').join('/');
                 });
+                const key = item.parentPath 
+                    ? [item.parentPath, item.path].join('/') 
+                    : item.path.split('/').join('/');
                 newArr.push(
-                    getItem(item.title, item.path, addIcon(item.icon!), deepLoopMenu(item.children))
+                    getItem(item.title, 
+                        key, 
+                        addIcon(item.icon!), deepLoopMenu(item.children))
                 );
             }
         });
         return newArr;
     };
+
     // 获取菜单
     const getMenuData = () => {
         const data = menus;
         if(!data) {return ;}
         const temp_menus = JSON.parse(JSON.stringify(data));
         const getMenus = deepLoopMenu(temp_menus);
-        console.log(JSON.stringify(getMenus));
         setMenuList(getMenus);
     };
     useEffect(() => {
@@ -82,21 +90,16 @@ function SideMenu(props: any) {
     };
     // 设置key
     useEffect(() => {
-        console.log('collapsed--', collapsed);
         setSelectedKey(pathname);
         collapsed ? null : setOpenKeys(getOpenKeys(pathname));
-    }, [pathname]);
-
+    }, [pathname, collapsed]);
 
     // 点击菜单
     const handleClick:MenuProps['onClick'] = (e) => {
-        const path = e.keyPath.reverse().join('/');
-        console.log('handleClick', e, path);
         navigate(e.key);
     };
-    // 切换open
+    // 切换菜单open
     const onOpenChange = (openKeys: string[]) => {
-        console.log('change ', openKeys);
         if (openKeys.length === 0 || openKeys.length === 1) {
             return setOpenKeys(openKeys);
         }

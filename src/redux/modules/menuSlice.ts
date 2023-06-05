@@ -12,7 +12,6 @@ const menuSlice = createSlice({
     initialState,
     reducers: {
         updateCollapse: (state, action) => {
-            console.log("updateCollapse--slice", state, action);
             state.collapsed = action.payload;
         }
     }
