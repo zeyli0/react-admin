@@ -1,4 +1,4 @@
-// import { useEffect } from "react";
+import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import { connect, useDispatch } from 'react-redux';
 import {
@@ -13,11 +13,8 @@ import { updateCollapse } from "../../redux/modules/menuSlice";
 
 
 function Index(props: any) {
-    console.log('props---', props);
+    
     const dispatch = useDispatch();
-    // todo
-    // const collapsedVal = useSelector((state:any) => state.collapsed);
-    // const [collapsed, setCollapsed] = useState(collapsedVal.collapsed);
     const { collapsed } = props;
 
     const {
@@ -25,18 +22,18 @@ function Index(props: any) {
     } = theme.useToken();
 
     // 监听窗口大小变化
-    // const listeningWindow = () => {
-    //     window.onresize = () => {
-    //         return (() => {
-    //             const screenWidth = document.body.clientWidth;
-    //             if (!collapsed && screenWidth < 1200) {dispatch(updateCollapse(true));}
-    //             if (!collapsed && screenWidth > 1200) {dispatch(updateCollapse(false));}
-    //         })();
-    //     };
-    // };
-    // useEffect(() => {
-    //     listeningWindow();
-    // }, []);
+    const listeningWindow = () => {
+        window.onresize = () => {
+            return (() => {
+                const screenWidth = document.body.clientWidth;
+                if (!collapsed && screenWidth < 1200) {dispatch(updateCollapse(true));}
+                if (!collapsed && screenWidth > 1200) {dispatch(updateCollapse(false));}
+            })();
+        };
+    };
+    useEffect(() => {
+        listeningWindow();
+    }, []);
 
     return  (
         <section style={{display: 'flex'}}>
