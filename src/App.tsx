@@ -1,16 +1,24 @@
+
 import './App.css';
 import './assets/style/style.scss';
 import RouterIndex from './router';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
+import { useState } from 'react';
+import { ConfigProvider } from 'antd';
+import zhCN from 'antd/locale/zh_CN';
+import enUS from 'antd/locale/en_US';
 
 function App() {
+    const [i18nLocale, setI18nLocale] = useState(zhCN);
     return (
         <BrowserRouter>
-            {/* <Routes> */}
-            {/* <Route path="*" element={<div>app !!!</div>} /> */}
-            {/* 其他路由定义 */}
-            {/* </Routes> */}
-            <RouterIndex />
+            <ConfigProvider locale={i18nLocale}>
+                {/* <Routes> */}
+                {/* <Route path="*" element={<div>app !!!</div>} /> */}
+                {/* 其他路由定义 */}
+                {/* </Routes> */}
+                <RouterIndex />
+            </ConfigProvider>   
         </BrowserRouter>
     );
 }
